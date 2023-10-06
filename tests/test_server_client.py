@@ -14,8 +14,7 @@ def test_server_client():
     received = False
     server_received = False
   
-    @asyncio.coroutine
-    def sendData():
+    async def sendData():
         while True:
             try:
                 print("trying to broadcast to {} clients...".format(len(s.clients)))
@@ -27,7 +26,7 @@ def test_server_client():
                 traceback.print_exception(exc_type, exc_value, exc_traceback,
                               limit=2, file=sys.stdout)
 
-            yield from asyncio.sleep(0.1)
+            await asyncio.sleep(0.1)
 
     loop.create_task(sendData())
 

@@ -33,8 +33,7 @@ def onBinaryMessage(msg, client):
 server.setTextHandler(onTextMessage)
 server.setBinaryHandler(onBinaryMessage)
 
-@asyncio.coroutine
-def sendData():
+async def sendData():
 	while True:
 		try:
 			print("trying to broadcast...")
@@ -45,7 +44,7 @@ def sendData():
 			traceback.print_exception(exc_type, exc_value, exc_traceback,
                           limit=2, file=sys.stdout)
 
-		yield from asyncio.sleep(30)
+		await asyncio.sleep(30)
 
 loop.create_task(sendData())
 

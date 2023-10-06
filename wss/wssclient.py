@@ -35,10 +35,9 @@ class ReconnectAsyncio(DebugPrinter):
 		else:
 			self.loop.create_task(self._connect_once())
 		
-	@asyncio.coroutine
-	def _connect_once(self):
+	async def _connect_once(self):
 		try:
-			yield from self._connect()
+			await self._connect()
 
 		except ConnectionRefusedError:
 			self.print_debug("connection refused ({})".format(self.address))
@@ -53,22 +52,21 @@ class ReconnectAsyncio(DebugPrinter):
 					file=sys.stdout)
 			self.print_debug("connection failed ({})".format(self.address))
 
-	@asyncio.coroutine
-	def _connect_retry(self):
+	async def _connect_retry(self):
 		timeout = 5
 		maxtimeout = 60
 
 		while True:
 			try:
 				self.print_debug("connecting...")
-				yield from self._connect()
+				await self._connect()
 
 				self.print_debug("connected!")
 				return
 
 			except ConnectionRefusedError:
 				self.print_debug("connection refused ({}). retry in {} seconds...".format(self.address, timeout))
-				yield from asyncio.sleep(timeout)
+				await asyncio.sleep(timeout)
 				if timeout < maxtimeout:
 					timeout += 2
 
@@ -76,7 +74,7 @@ class ReconnectAsyncio(DebugPrinter):
 
 			except OSError:
 				self.print_debug("connection failed ({}). retry in {} seconds...".format(self.address, timeout))
-				yield from asyncio.sleep(timeout)
+				await asyncio.sleep(timeout)
 
 				if timeout < maxtimeout:
 					timeout += 2

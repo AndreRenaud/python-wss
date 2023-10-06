@@ -218,8 +218,7 @@ if __name__ == "__main__":
 
 	s = server_main()
 
-	@asyncio.coroutine
-	def sendData():
+	async def sendData():
 		while True:
 			try:
 				print("trying to broadcast to {} clients...".format(len(s.clients)))
@@ -230,7 +229,7 @@ if __name__ == "__main__":
 				traceback.print_exception(exc_type, exc_value, exc_traceback,
 	                          limit=2, file=sys.stdout)
 
-			yield from asyncio.sleep(30)
+			await asyncio.sleep(30)
 
 	loop.create_task(sendData())
 
